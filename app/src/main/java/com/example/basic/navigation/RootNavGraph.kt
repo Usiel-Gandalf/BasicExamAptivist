@@ -4,7 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.basic.presentation.FirstScreen
+import com.example.basic.domain.OperationType
+import com.example.basic.presentation.firstNumber.FirstScreen
 import com.example.basic.presentation.OperatorView
 import com.example.basic.presentation.ResultView
 import com.example.basic.presentation.SecondView
@@ -27,11 +28,15 @@ fun RootNavaGraph(navController: NavHostController){
             })
         }
 
+        //TODO Hacerlo en una share shareviewmodel para la persistencia de los datos para no estar pasando todos los valores
+
         composable(NavigationScreen.SecondScreen.route + "/{value1}" + "/{operator}"){
             val number1 = it.arguments?.getString("value1") ?: "You must to do something"
             val operator = it.arguments?.getString("operator") ?: "Yo must"
 
-            SecondView(fistValue = number1, operaton = operator, navigateToResult = { firstValue, operator, secondValue ->
+            val operatorCasted = OperationType.valueOf(operator)
+
+            SecondView(fistValue = number1, operaton = operatorCasted, navigateToResult = { firstValue, operator, secondValue ->
                 navController.navigate(NavigationScreen.ResultScreen.route + "/${firstValue}" + "/${operator}" + "/${secondValue}")
             })
         }
@@ -40,7 +45,10 @@ fun RootNavaGraph(navController: NavHostController){
             val number1 = it.arguments?.getString("value1") ?: "You must to do something"
             val operator = it.arguments?.getString("operator") ?: "Yo must"
             val number2 = it.arguments?.getString("value2") ?: "You must to do something"
-            ResultView(firstValue = number1, operator = operator, secondValue = number2, returnToStart = {
+
+            val operatorCasted = OperationType.valueOf(operator)
+
+            ResultView(firstValue = number1, operator = operatorCasted, secondValue = number2, returnToStart = {
                 navController.navigate(NavigationScreen.FirstScreen.route){
                     popUpTo(NavigationScreen.FirstScreen.route){
                         inclusive = true
