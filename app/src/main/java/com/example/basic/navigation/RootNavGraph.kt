@@ -1,10 +1,8 @@
 package com.example.basic.navigation
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.composable
 import com.example.basic.presentation.FirstScreen
 import com.example.basic.presentation.OperatorView
@@ -43,7 +41,11 @@ fun RootNavaGraph(navController: NavHostController){
             val operator = it.arguments?.getString("operator") ?: "Yo must"
             val number2 = it.arguments?.getString("value2") ?: "You must to do something"
             ResultView(firstValue = number1, operator = operator, secondValue = number2, returnToStart = {
-                navController.navigate(NavigationScreen.FirstScreen.route)
+                navController.navigate(NavigationScreen.FirstScreen.route){
+                    popUpTo(NavigationScreen.FirstScreen.route){
+                        inclusive = true
+                    }
+                }
             })
         }
     }
